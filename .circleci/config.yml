@@ -41,7 +41,7 @@ jobs:
       - run:
           name: download with aria2
           command: |
-            aria2c -d ${CIRCLE_BRANCH} --seed-time=2 --seed-ratio=0.1 'MAGNET_LINK'
+            aria2c -d ${CIRCLE_BRANCH} --seed-time=2 --seed-ratio=0.1 'http://ssa.1337x.to/query?bver=1&refer=https%3A%2F%2F1337x.to%2Ftorrent%2F1248076%2FMr-Robot-S01E08-REAL-720p-HDTV-x264-KILLERS-EtHD%2F&kw=%5B%22download%22%2C%22mr%22%2C%22robot%22%2C%22s01e08%22%2C%22real%22%2C%22720p%22%2C%22hdtv%22%2C%22x264-killers%22%2C%22ethd%22%2C%22torrent%22%2C%221337x%22%5D&key=08e7ffd6a1ad8052c7c702273b643766&scrWidth=1440&scrHeight=900&tz=-4&ship=&pst=&res=4.31&dev=r&psid=var2_o'
 
       - run:
           name: zip file
