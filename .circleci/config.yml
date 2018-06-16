@@ -41,7 +41,7 @@ jobs:
       - run:
           name: download with aria2
           command: |
-            aria2c -d ${CIRCLE_BRANCH} --seed-time=2 --seed-ratio=0.1 'http://ssa.1337x.to/query?bver=1&refer=https%3A%2F%2F1337x.to%2Ftorrent%2F1248076%2FMr-Robot-S01E08-REAL-720p-HDTV-x264-KILLERS-EtHD%2F&kw=%5B%22download%22%2C%22mr%22%2C%22robot%22%2C%22s01e08%22%2C%22real%22%2C%22720p%22%2C%22hdtv%22%2C%22x264-killers%22%2C%22ethd%22%2C%22torrent%22%2C%221337x%22%5D&key=08e7ffd6a1ad8052c7c702273b643766&scrWidth=1440&scrHeight=900&tz=-4&ship=&pst=&res=4.31&dev=r&psid=var2_o'
+            aria2c -d ${CIRCLE_BRANCH} --seed-time=2 --seed-ratio=0.1 'magnet:?xt=urn:btih:E047B8E6D827FFC5677EA5F77E6557BE033F6969&dn=Mr.Robot.S01E08.REAL.720p.HDTV.x264-KILLERS%5BEtHD%5D&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker4.piratux.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.blackunicorn.xyz%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.aletorrenty.pl%3A2710%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=http%3A%2F%2Ftorrent.gresille.org%2Fannounce&tr=udp%3A%2F%2Feddie4.nl%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce'
 
       - run:
           name: zip file
