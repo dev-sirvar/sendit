@@ -48,8 +48,13 @@ jobs:
           command: |
             zip -r ${CIRCLE_BRANCH}.zip ${CIRCLE_BRANCH}
             
+#      - run:
+#          name: send file
+#          command: |
+#            ./sendit.sh ${CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d "{\"state\":\"success\",\"target_url\":\"{}\",\"context\":\"sendit\"}" -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+            
       - run:
           name: send file
           command: |
-            ./sendit.sh ${CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d "{\"state\":\"success\",\"target_url\":\"{}\",\"context\":\"sendit\"}" -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+            ./sendit.sh ${CIRCLE_BRANCH}.zip
             
