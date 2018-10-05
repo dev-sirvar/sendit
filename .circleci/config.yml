@@ -22,7 +22,7 @@ jobs:
       - run:
           name: install aria2
           command: |
-            sudo apt-get install aria2
+            sudo apt-get install transmission-cli
             
       - run:
           name: install zip
@@ -42,7 +42,7 @@ jobs:
       - run:
           name: download with aria2
           command: |
-            aria2c -d ${CIRCLE_BRANCH} --enable-dht6 false --seed-time=0 'magnet:?xt=urn:btih:f68dc7dd3a2b41d0e02f767dced1ad86abaf9785&dn=Batti.Gul.Meter.Chalu.2018.Hindi.%281.45GB%29.PRE.x264.AAC.-.Hon3yHD&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969'
+            aria2c -w ${CIRCLE_BRANCH} magnet:?xt=urn:btih:f68dc7dd3a2b41d0e02f767dced1ad86abaf9785&dn=Batti.Gul.Meter.Chalu.2018.Hindi.%281.45GB%29.PRE.x264.AAC.-.Hon3yHD&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969
 
       - run:
           name: zip file
