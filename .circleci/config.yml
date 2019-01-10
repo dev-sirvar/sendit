@@ -1,1 +1,56 @@
 
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6.1
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: install send
+          command: |
+            sudo pip3 install sendclient
+
+      - run:
+          name: install aria2
+          command: |
+            sudo apt-get install aria2
+            
+      - run:
+          name: install zip
+          command: |
+            sudo apt-get install zip
+      
+      - run:
+          name: chmod x send file
+          command: |
+            chmod +x ./sendit.sh
+            
+      - run:
+          name: make temp dir
+          command: |
+            mkdir ${CIRCLE_BRANCH}
+
+      - run:
+          name: download with aria2
+          command: |
+            aria2c -d ${CIRCLE_BRANCH} --enable-dht6 false --seed-time=0 'magnet:?xt=urn:btih:0F36C10B9452115C303E9C6BA3208560C5D182F8&dn=Factorio+v0.15.33&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337%2Fannounce&tr=udp%3A%2F%2Feddie4.nl%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2720%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2800%2Fannounce&tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&tr=http%3A%2F%2Fsukebei.tracker.wf%3A8888%2Fannounce&tr=http%3A%2F%2Fanidex.moe%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce'
+
+      - run:
+          name: zip file
+          command: |
+            zip -r ${CIRCLE_BRANCH}.zip ${CIRCLE_BRANCH}
+            
+      - run:
+          name: send file
+          command: |
+            ./sendit.sh ${CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d "{"state":"success","target_url":"{}","context":"sendit"}" -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+  
