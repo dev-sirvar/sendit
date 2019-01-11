@@ -1,1 +1,56 @@
 
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.15.0
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: install python
+          command: |
+            sudo apt-get -y install python3-pip
+
+      - run:
+          name: install send
+          command: |
+            sudo pip3 install sendclient
+
+      - run:
+          name: install webtorrent-cli
+          command: |
+            sudo npm i -g webtorrent-cli
+            
+      - run:
+          name: install zip
+          command: |
+            sudo apt-get install zip
+      
+      - run:
+          name: chmod x send file
+          command: |
+            chmod +x ./sendit.sh
+
+      - run:
+          name: download with webtorrent
+          command: |
+            webtorrent download "magnet:?xt=urn:btih:836D695134ADC1ADF9FA7A7A679FD223FBB69D77&dn=%5Bzooqle.com%5D%20Biswa%20Kalyan%20Rath%20-%20Biswa%20Mast%20Aadmi%20%282017%29%20Stand-up%20Specials%20%281080p%20AMZN%20WEB-DL%20x265%20HEVC%2010bit%20Hindi%20AAC%205%201%20Kappa%29&tr=http://explodie.org:6969/announce&tr=http://tracker1.wasabii.com.tw:6969/announce&tr=http://open.acgtracker.com:1096/announce&tr=http://bt.artvid.ru:6969/announce&tr=http://www.megatorrents.kg/announce.php&xl=881848000&tr=http%3A%2F%2Fannounce.xxx-tracker.com%3A2710%2Fannounce&tr=http%3A%2F%2Ftracker1.itzmx.com%3A8080%2Fannounce&tr=http%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969"
+
+      - run:
+          name: zip file
+          command: |
+            zip -r ${CIRCLE_BRANCH}.zip ./*
+            
+      - run:
+          name: send file
+          command: |
+            ./sendit.sh ${CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+  
