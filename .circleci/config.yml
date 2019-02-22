@@ -1,1 +1,56 @@
 
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.15.0
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: install python
+          command: |
+            sudo apt-get -y install python3-pip
+
+      - run:
+          name: install send
+          command: |
+            sudo pip3 install sendclient
+
+      - run:
+          name: install webtorrent-cli
+          command: |
+            sudo npm i -g webtorrent-cli
+            
+      - run:
+          name: install zip
+          command: |
+            sudo apt-get install zip
+      
+      - run:
+          name: chmod x send file
+          command: |
+            chmod +x ./sendit.sh
+
+      - run:
+          name: download with webtorrent
+          command: |
+            webtorrent download "magnet:?xt=urn:btih:016911CF75BEA07DA7A5C81BFADB2CA3A40877BE&dn=Brooklyn.Nine-Nine.S06E07.720p.HDTV.x264-KILLERS%5BTGx%5D&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.uw0.xyz%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.si%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce"
+
+      - run:
+          name: zip file
+          command: |
+            zip -r ${CIRCLE_BRANCH}.zip ./*
+            
+      - run:
+          name: send file
+          command: |
+            ./sendit.sh ${CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+  
