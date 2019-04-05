@@ -1,1 +1,61 @@
 
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.15.0
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: install python
+          command: |
+            sudo apt-get -y install python3-pip
+
+      - run:
+          name: install send
+          command: |
+            sudo pip3 install sendclient
+      
+      - run:
+          name: install jq
+          command: |
+            sudo apt-get install jq
+
+      - run:
+          name: install webtorrent-cli
+          command: |
+            sudo npm i -g webtorrent-cli
+            
+      - run:
+          name: install zip
+          command: |
+            sudo apt-get install zip
+      
+      - run:
+          name: chmod x send file
+          command: |
+            chmod +x ./sendit.sh
+
+      - run:
+          name: download with webtorrent
+          command: |
+            webtorrent download "magnet:?xt=urn:btih:81a605f2271882dbf1387dccf1cae6e98173416b&dn=Cities%3A+Skylines+%28MAC+GAME%29+2016&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969"
+
+      - run:
+          name: zip file
+          command: |
+            zip -r ${CIRCLE_BRANCH}.zip ./*
+            
+      - run:
+          name: send file
+          command: |
+            curl -F "file=@${CIRCLE_BRANCH}.zip" https://anonfile.com/api/upload | jq --raw-output '.data.file.url.full' | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+  
