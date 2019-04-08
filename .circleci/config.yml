@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: snapcore/snapcraft
+      - image: cibuilds/snapcraft
 
     working_directory: ~/repo
 
