@@ -22,7 +22,12 @@ jobs:
       - run:
         name: snapd
         command: |
-          sudo snap install docker circleci && sudo snap connect circleci:docker docker
+          sudo snap install docker circleci
+          
+      - run:
+        name: connect
+        command: |
+          sudo snap connect circleci:docker docker
       
       - run:
           name: install ffsend
