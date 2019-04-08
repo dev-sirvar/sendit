@@ -17,7 +17,7 @@ jobs:
       - run:
           name: install dep
           command: |
-            sudo apt install build-essential cmake pkg-config libssl-dev cargo xclip openssl ca-certificates nodejs
+            sudo apt-get install build-essential cmake pkg-config libssl-dev cargo xclip openssl ca-certificates
       
       - run:
           name: install ffsend
