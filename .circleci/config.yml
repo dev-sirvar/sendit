@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cibuilds/snapcraft
+      - image: circleci/rust
 
     working_directory: ~/repo
 
@@ -17,12 +17,9 @@ jobs:
       - run:
           name: update
           command: |
-            sudo apt-get update && sudo apt install snapd
-            
-      - run:
-          name: install ffsend
-          command: |
-            sudo snap install ffsend 
+            sudo git clone https://github.com/timvisee/ffsend.git
+            cd ffsend
+            cargo install --path . -f
            
       - run:
           name: install python
