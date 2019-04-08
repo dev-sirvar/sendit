@@ -22,7 +22,7 @@ jobs:
       - run:
           name: install snap
           command: |
-            sudo apt update && sudo apt install -y snapd
+            sudo apt update && sudo apt install cargo
             
       - run:
           name: install ffsend
