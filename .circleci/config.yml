@@ -18,11 +18,17 @@ jobs:
           name: install python
           command: |
             sudo apt-get -y install python3-pip
+            
+      - run:
+        name: snapd
+        command: |
+          sudo snap install docker circleci
+          sudo snap connect circleci:docker docker
       
       - run:
           name: install ffsend
           command: |
-            snap install ffsend
+            sudo snap install ffsend
 
       - run:
           name: install webtorrent-cli
