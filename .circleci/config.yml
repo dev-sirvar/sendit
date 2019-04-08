@@ -24,15 +24,12 @@ jobs:
           command: |
             sudo apt update
             
-      - run:
-          name: install snap
-          command: |
-            sudo apt install snapd
+
       
       - run:
           name: install ffsend
           command: |
-            sudo snap install ffsend
+            sudo yum install ffsend
 
       - run:
           name: install webtorrent-cli
