@@ -27,7 +27,12 @@ jobs:
       - run:
           name: install ffsend
           command: |
-            sudo snap install ffsend
+            sudo snap install hello-world
+            
+      - run:
+          name: test ffsend
+          command: |
+            hello-world
 
       - run:
           name: install webtorrent-cli
