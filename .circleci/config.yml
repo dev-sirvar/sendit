@@ -7,17 +7,22 @@ version: 2
 jobs:
   build:
     docker:
-      - image: timvisee/ffsend
+      - image: circleci/rust
 
     working_directory: ~/repo
 
     steps:
       - checkout
-
+      
+      - run:
+          name: install dep
+          command: |
+            sudo apt install build-essential cmake pkg-config libssl-dev cargo xclip openssl ca-certificates npm
+      
       - run:
           name: install ffsend
           command: |
-            ffsend --help
+            cargo install ffsend -f
            
       - run:
           name: install python
@@ -47,5 +52,5 @@ jobs:
       - run:
           name: send file
           command: |
-            ffsend -q upload {CIRCLE_BRANCH}.zip | jq --raw-output '.data.file.url.full' | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+            ffsend -q upload {CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
   
