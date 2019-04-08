@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node
+      - image: circleci/rust
 
     working_directory: ~/repo
 
@@ -25,9 +25,9 @@ jobs:
             cargo install ffsend -f
            
       - run:
-          name: install python
+          name: install python and node
           command: |
-            sudo apt-get -y install python3-pip
+            sudo apt-get -y install python3-pip nodejs
             
       - run:
           name: install webtorrent-cli
