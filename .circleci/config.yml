@@ -13,10 +13,7 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: install snap
-          command: |
-            sudo apt install cargo
+      
       - run:
           name: install python
           command: |
