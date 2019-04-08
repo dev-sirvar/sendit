@@ -18,11 +18,6 @@ jobs:
           name: install python
           command: |
             sudo apt-get -y install python3-pip
-
-      - run:
-          name: install snap
-          command: |
-            sudo apt install snapd
       
       - run:
           name: install ffsend
