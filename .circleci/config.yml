@@ -24,7 +24,6 @@ jobs:
           command: |
             sudo git clone https://github.com/timvisee/ffsend.git
             cd ffsend
-            sudo cargo install clip
             sudo cargo install --path . -f
            
       - run:
