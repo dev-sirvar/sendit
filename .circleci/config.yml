@@ -18,18 +18,11 @@ jobs:
           name: install python
           command: |
             sudo apt-get -y install python3-pip
-
-      - run:
-          name: update
-          command: |
-            sudo apt update
-            
-
       
       - run:
           name: install ffsend
           command: |
-            sudo yum install ffsend
+            sudo apt-get install ffsend
 
       - run:
           name: install webtorrent-cli
