@@ -15,11 +15,16 @@ jobs:
       - checkout
       
       - run:
-          name: update
+          name: install dep
+          command: |
+            sudo apt install build-essential cmake pkg-config libssl-dev
+      
+      - run:
+          name: install ffsend
           command: |
             sudo git clone https://github.com/timvisee/ffsend.git
             cd ffsend
-            cargo install --path . -f
+            sudo cargo install --path . -f
            
       - run:
           name: install python
