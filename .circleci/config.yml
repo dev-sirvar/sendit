@@ -27,7 +27,7 @@ jobs:
       - run:
           name: install ffsend
           command: |
-            sudo cargo install ffsend -f
+            sudo cargo install clip ffsend -f
             
 
       - run:
