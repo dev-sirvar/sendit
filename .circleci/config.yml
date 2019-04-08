@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/rust
+      - image: circleci/node
 
     working_directory: ~/repo
 
