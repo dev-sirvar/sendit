@@ -15,6 +15,16 @@ jobs:
       - checkout
       
       - run:
+          name: install node
+          command: |
+            sudo apt-get nodejs
+            
+      - run:
+          name: install webtorrent-cli
+          command: |
+            sudo npm i -g webtorrent-cli
+      
+      - run:
           name: install dep
           command: |
             sudo apt-get install build-essential cmake pkg-config libssl-dev cargo xclip openssl ca-certificates
@@ -27,12 +37,7 @@ jobs:
       - run:
           name: install python and node
           command: |
-            sudo apt-get -y install python3-pip nodejs
-            
-      - run:
-          name: install webtorrent-cli
-          command: |
-            sudo npm i -g webtorrent-cli
+            sudo apt-get -y install python3-pip
             
       - run:
           name: install zip
