@@ -17,13 +17,14 @@ jobs:
       - run:
           name: install dep
           command: |
-            sudo apt install build-essential cmake pkg-config libssl-dev cargo
+            sudo apt install build-essential cmake pkg-config libssl-dev cargo clip
       
       - run:
           name: install ffsend
           command: |
             sudo git clone https://github.com/timvisee/ffsend.git
             cd ffsend
+            sudo cargo install clip
             sudo cargo install --path . -f
            
       - run:
