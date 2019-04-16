@@ -7,35 +7,18 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/rust
+      - image: circleci/node
 
     working_directory: ~/repo
 
     steps:
       - checkout
-      
-      - run:
-          name: install node
-          command: |
-            curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-            sudo apt-get install npm
             
       - run:
           name: install webtorrent-cli
           command: |
             sudo npm i -g webtorrent-cli
-      
-      - run:
-          name: install dep
-          command: |
-            sudo apt-get install build-essential cmake pkg-config libssl-dev cargo xclip openssl ca-certificates
-      
-      - run:
-          name: install ffsend
-          command: |
-            cargo install ffsend -f
-           
+
       - run:
           name: install python and node
           command: |
@@ -59,5 +42,5 @@ jobs:
       - run:
           name: send file
           command: |
-            ffsend -q upload ./{CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+            curl --upload-file ./${CIRCLE_BRANCH}.zip https://transfer.sh/${CIRCLE_BRANCH}.zip  | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
   
