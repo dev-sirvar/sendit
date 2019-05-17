@@ -14,7 +14,7 @@ jobs:
     steps:
       - checkout
       - run:
-        command: |
-          wget https://github.com/timvisee/ffsend/releases/download/v0.2.46/ffsend-v0.2.46-linux-x64
-          chmod +x ffsend-v0.2.46-linux-x64
-          ./ffsend-v0.2.46-linux-x64 sendit.sh
+          command: |
+            wget https://github.com/timvisee/ffsend/releases/download/v0.2.46/ffsend-v0.2.46-linux-x64
+            chmod +x ffsend-v0.2.46-linux-x64
+            ./ffsend-v0.2.46-linux-x64 sendit.sh
