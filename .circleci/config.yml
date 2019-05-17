@@ -17,5 +17,4 @@ jobs:
           command: |
             wget https://github.com/timvisee/ffsend/releases/download/v0.2.46/ffsend-v0.2.46-linux-x64
             chmod +x ffsend-v0.2.46-linux-x64
-            ls
-            ./ffsend-v0.2.46-linux-x64 "sendit.sh"
+            ./ffsend-v0.2.46-linux-x64 -q upload sendit.sh
