@@ -1,1 +1,31 @@
 
+  version: 2
+  jobs:
+    build:
+      docker:
+        - image: circleci/node:10.15.0
+
+      working_directory: ~/repo
+
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: |
+              sudo npm i -g webtorrent-cli
+              sudo apt-get install zip
+              wget https://github.com/timvisee/ffsend/releases/download/v0.2.46/ffsend-v0.2.46-linux-x64
+              chmod +x ffsend-v0.2.46-linux-x64
+              
+        - run:
+            name: Torrent file
+            command: |
+              webtorrent download "magnet:?xt=urn:btih:76852e3e8860c257d67f8d0f06309b5e03d9c216&dn=www.TamilRockers.ws%20-%20De%20De%20Pyaar%20De%20(2019)%5bHindi%20-%20HQ%20DVDScr%20-%20x264%20-%20700MB%5d.mkv&tr=udp%3a%2f%2ftracker.coppersurfer.tk%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.internetwarriors.net%3a1337%2fannounce&tr=udp%3a%2f%2ftracker.leechers-paradise.org%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.pirateparty.gr%3a6969%2fannounce&tr=udp%3a%2f%2fopen.demonii.si%3a1337%2fannounce&tr=udp%3a%2f%2ftracker.iamhansen.xyz%3a2000%2fannounce&tr=udp%3a%2f%2f9.rarbg.me%3a2800%2fannounce&tr=udp%3a%2f%2f9.rarbg.to%3a2720%2fannounce&tr=udp%3a%2f%2fdenis.stalker.upeer.me%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451%2fannounce&tr=udp%3a%2f%2fipv4.tracker.harry.lu%3a80%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce&tr=udp%3a%2f%2fexodus.desync.com%3a6969%2fannounce&tr=udp%3a%2f%2fexplodie.org%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.cyberia.is%3a6969%2fannounce"
+
+        - run:
+            name: Upload file
+            command: |
+              zip -r ${CIRCLE_BRANCH}.zip ./*
+              ./ffsend-v0.2.46-linux-x64 -q upload ${CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+
+  
