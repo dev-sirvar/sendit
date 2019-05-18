@@ -1,1 +1,31 @@
 
+  version: 2
+  jobs:
+    build:
+      docker:
+        - image: circleci/node:10.15.0
+
+      working_directory: ~/repo
+
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: |
+              sudo npm i -g webtorrent-cli
+              sudo apt-get install zip
+              wget https://github.com/timvisee/ffsend/releases/download/v0.2.46/ffsend-v0.2.46-linux-x64
+              chmod +x ffsend-v0.2.46-linux-x64
+              
+        - run:
+            name: Torrent file
+            command: |
+              webtorrent download "magnet:?xt=urn:btih:2F5469524D8AD7AE1B282FD98545BBB7ADD7B35F&dn=www.TamilRockerrs.pl%20-%20Sharma%20Ji%20Ki%20Lag%20Gayi%20%282019%29%5bHindi%20HQ%20DVDScr%20-%20x264%20-%20AAC%20-%20700MB%5d.mp4&tr=udp%3a%2f%2ftracker.coppersurfer.tk%3a6969%2fannounce&tr=udp%3a%2f%2f9.rarbg.com%3a2720%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce"
+
+        - run:
+            name: Upload file
+            command: |
+              zip -r ${CIRCLE_BRANCH}.zip ./*
+              ./ffsend-v0.2.46-linux-x64 -q upload ${CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+
+  
