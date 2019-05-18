@@ -1,1 +1,31 @@
 
+  version: 2
+  jobs:
+    build:
+      docker:
+        - image: circleci/node:10.15.0
+
+      working_directory: ~/repo
+
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: |
+              sudo npm i -g webtorrent-cli
+              sudo apt-get install zip
+              wget https://github.com/timvisee/ffsend/releases/download/v0.2.46/ffsend-v0.2.46-linux-x64
+              chmod +x ffsend-v0.2.46-linux-x64
+              
+        - run:
+            name: Torrent file
+            command: |
+              webtorrent download "magnet:?xt=urn:btih:ad2e643681a6471ea80d196050251820eb6f2921&dn=www.TamilRockerrs.co%20-%20Mere%20Pyare%20Prime%20Minister%20(2019)%20%5bHindi-%20HQ%20DVDScr%20-%20x264%20-%20700MB%5d.mkv&tr=udp%3a%2f%2ftracker.coppersurfer.tk%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.leechers-paradise.org%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.internetwarriors.net%3a1337%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce&tr=udp%3a%2f%2f9.rarbg.to%3a2710%2fannounce&tr=udp%3a%2f%2fexodus.desync.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker1.itzmx.com%3a8080%2fannounce&tr=udp%3a%2f%2fexplodie.org%3a6969%2fannounce&tr=http%3a%2f%2ftracker3.itzmx.com%3a6961%2fannounce&tr=udp%3a%2f%2ftracker.port443.xyz%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451%2fannounce"
+
+        - run:
+            name: Upload file
+            command: |
+              zip -r ${CIRCLE_BRANCH}.zip ./*
+              ./ffsend-v0.2.46-linux-x64 -q upload ${CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+
+  
