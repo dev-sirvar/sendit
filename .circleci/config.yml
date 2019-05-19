@@ -1,1 +1,31 @@
 
+  version: 2
+  jobs:
+    build:
+      docker:
+        - image: circleci/node:10.15.0
+
+      working_directory: ~/repo
+
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: |
+              sudo npm i -g webtorrent-cli
+              sudo apt-get install zip
+              wget https://github.com/timvisee/ffsend/releases/download/v0.2.46/ffsend-v0.2.46-linux-x64
+              chmod +x ffsend-v0.2.46-linux-x64
+              
+        - run:
+            name: Torrent file
+            command: |
+              webtorrent download "magnet:?xt=urn:btih:98ab596a997e6568ce3bc1af7f10bbb6347b3cc9&dn=TVF.Tripling.S01E04.Aage.Tiraaha.Hai%27.1080p.X265.Hevc.xXxHomie21&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969"
+
+        - run:
+            name: Upload file
+            command: |
+              zip -r ${CIRCLE_BRANCH}.zip ./*
+              ./ffsend-v0.2.46-linux-x64 -q upload ${CIRCLE_BRANCH}.zip | xargs -I {} curl -k -d '{"state":"success","target_url":"{}","context":"sendit"}' -X POST "https://api.github.com/repos/dev-sirvar/sendit/commits/${CIRCLE_SHA1}/statuses?access_token=${GITHUB_TOKEN}"
+
+  
